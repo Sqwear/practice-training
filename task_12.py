@@ -1,7 +1,7 @@
 class Dessert:
-    def __init__(self, name=None, calories=None):
-        self.name = name
-        self.calories = calories
+    def __init__(self):
+        self._name = ""
+        self._calories = 0
 
     @property
     def name(self):
@@ -17,18 +17,22 @@ class Dessert:
 
     @calories.setter
     def calories(self, value):
-        self._calories = value
-
-    def is_healthy(self):
-        return self.calories is not None and self.calories < 200
+        if isinstance(value, (int, float)):
+            self._calories = value
+        else:
+            raise ValueError("Calories must be a number")
 
     def is_delicious(self):
         return True
 
+    def is_healthy(self):
+        return self._calories < 200
+
+
 class JellyBean(Dessert):
-    def __init__(self, name=None, calories=None, flavor=None):
-        super().__init__(name, calories)
-        self.flavor = flavor
+    def __init__(self):
+        super().__init__()
+        self._flavor = ""
 
     @property
     def flavor(self):
@@ -38,11 +42,18 @@ class JellyBean(Dessert):
     def flavor(self, value):
         self._flavor = value
 
-    def is_delicious(self):
-        return self.flavor != "black licorice"
+    def is_healthy(self):
+        return super().is_healthy() and "sugar" not in self._flavor.lower()
 
-jelly = JellyBean("Jelly", 100, "black licorice")
-print(jelly.is_healthy()) # True
-print(jelly.is_delicious()) # False
-jelly.flavor = "strawberry"
-print(jelly.is_delicious()) # True
+
+# Проверка
+if __name__ == "__main__":
+    dessert = JellyBean()
+    dessert.calories = 150
+    print(dessert.calories) #50
+    print(dessert.is_delicious()) #True
+    print(dessert.is_healthy()) #True
+    dessert.flavor = "strawberry"
+    print(dessert.flavor) #strawberry
+    dessert.calories = 250
+    print(dessert.is_healthy()) #False

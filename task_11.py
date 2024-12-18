@@ -1,7 +1,7 @@
 class Dessert:
-    def __init__(self, name=None, calories=None):
-        self.name = name
-        self.calories = calories
+    def __init__(self):
+        self._name = ""
+        self._calories = 0
 
     @property
     def name(self):
@@ -17,14 +17,23 @@ class Dessert:
 
     @calories.setter
     def calories(self, value):
-        self._calories = value
-
-    def is_healthy(self):
-        return self.calories is not None and self.calories < 200
+        if isinstance(value, (int, float)):
+            self._calories = value
+        else:
+            raise ValueError("Calories must be a number.")
 
     def is_delicious(self):
         return True
 
-dessert = Dessert("Cake", 150)
-print(dessert.is_healthy()) # True
-print(dessert.is_delicious()) # True
+    def is_healthy(self):
+        return self.calories < 200
+
+# Проверка
+if __name__ == "__main__":
+    dessert = Dessert()
+    dessert.name = "Cake"
+    print(dessert.name) # Cake
+    dessert.calories = 150
+    print(dessert.calories) # 150
+    print(dessert.is_delicious()) # True
+    print(dessert.is_healthy()) # True
